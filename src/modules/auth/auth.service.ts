@@ -1,3 +1,4 @@
+import { HttpException } from "../../exceptions/http.exception";
 import { User } from "../../models/user.model";
 import { Crypt } from "../../utils/crypt";
 import { Jwt } from "../../utils/jwt";
@@ -8,7 +9,12 @@ export class AuthService {
     const exists = await User.findOne({ email });
 
     if (exists) {
-      throw new Error("User already exists");
+      throw new HttpException(
+        409,
+        "CONFLICT",
+        "USER_ALREADY_EXISTS",
+        "User already exists"
+      );
     }
 
     const user = await User.create({ email, password: hash });
@@ -19,13 +25,23 @@ export class AuthService {
     const user = await User.findOne({ email });
 
     if (!user) {
-      throw new Error("User not found");
+      throw new HttpException(
+        404,
+        "NOT_FOUND",
+        "USER_NOT_FOUND",
+        "User not found"
+      );
     }
 
     const valid = await Crypt.compare(password, user.password);
 
     if (!valid) {
-      throw new Error("Invalid password");
+      throw new HttpException(
+        401,
+        "UNAUTHORIZED",
+        "INVALID_PASSWORD",
+        "Invalid password"
+      );
     }
 
     return Jwt.sign({ sub: user._id });
