@@ -3,14 +3,12 @@ import { AuthService } from "./auth.service";
 
 export class AuthController {
   static async register(req: Request, res: Response) {
-    const { email, password } = req.body;
-    const token = await AuthService.register(email, password);
+    const token = await AuthService.register(req.body);
     return res.json({ token });
   }
 
   static async login(req: Request, res: Response) {
-    const { email, password } = req.body;
-    const token = await AuthService.login(email, password);
+    const token = await AuthService.login(req.body);
     return res.json({ token });
   }
 }

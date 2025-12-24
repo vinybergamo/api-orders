@@ -4,9 +4,13 @@ import { Crypt } from "../../utils/crypt";
 import { Jwt } from "../../utils/jwt";
 
 export class AuthService {
-  static async register(email: string, password: string) {
-    const hash = await Crypt.hash(password);
-    const exists = await User.findOne({ email });
+  static async register(registerUserDto: {
+    name: string;
+    email: string;
+    password: string;
+  }) {
+    const hash = await Crypt.hash(registerUserDto.password);
+    const exists = await User.findOne({ email: registerUserDto.email });
 
     if (exists) {
       throw new HttpException(
@@ -17,12 +21,12 @@ export class AuthService {
       );
     }
 
-    const user = await User.create({ email, password: hash });
+    const user = await User.create({ ...registerUserDto, password: hash });
     return Jwt.sign({ sub: user._id });
   }
 
-  static async login(email: string, password: string) {
-    const user = await User.findOne({ email });
+  static async login(loginUserDto: { email: string; password: string }) {
+    const user = await User.findOne({ email: loginUserDto.email });
 
     if (!user) {
       throw new HttpException(
@@ -33,7 +37,7 @@ export class AuthService {
       );
     }
 
-    const valid = await Crypt.compare(password, user.password);
+    const valid = await Crypt.compare(loginUserDto.password, user.password);
 
     if (!valid) {
       throw new HttpException(
