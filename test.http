@@ -1,9 +1,37 @@
-# Register
-POST http://localhost:3333/register
+@token = eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWIiOiI2OTRjNjUzOWRlMWUxZDAyMWRlMDVkOTYiLCJpYXQiOjE3NjY2ODU3MTksImV4cCI6MTc2NzI5MDUxOX0.Fy7q44rN5GEMSX4y4ohpdnfpVMnBcKk1rjZ0BOP07fQ
+
+### Register
+POST http://localhost:3333/auth/register
 Content-Type: application/json
 
 {
     "name": "Viny Bergamo",
     "email": "vinybergamo@gmail.com",
     "password": "123456"
+}
+
+### Login
+POST http://localhost:3333/auth/login
+Content-Type: application/json
+
+{
+    "email": "vinybergamo@gmail.com",
+    "password": "123456"
+}
+
+### Create Order
+POST http://localhost:3333/orders
+Content-Type: application/json
+Authorization: Bearer {{token}}
+
+{
+    "lab": "Lab 1",
+    "patient": "Patient 1",
+    "customer": "Customer 1",
+    "services": [
+        {
+            "name": "Service 1",
+            "value": 10
+        }
+    ]
 }
