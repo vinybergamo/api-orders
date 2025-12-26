@@ -1,4 +1,5 @@
 @token = eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWIiOiI2OTRjNjUzOWRlMWUxZDAyMWRlMDVkOTYiLCJpYXQiOjE3NjY2ODU3MTksImV4cCI6MTc2NzI5MDUxOX0.Fy7q44rN5GEMSX4y4ohpdnfpVMnBcKk1rjZ0BOP07fQ
+@order_id = 694d7df8f8a814f4ac90da24
 
 ### Register
 POST http://localhost:3333/auth/register
@@ -19,6 +20,10 @@ Content-Type: application/json
     "password": "123456"
 }
 
+### List Orders
+GET http://localhost:3333/orders?limit=1
+Authorization: Bearer {{token}}
+
 ### Create Order
 POST http://localhost:3333/orders
 Content-Type: application/json
@@ -35,3 +40,7 @@ Authorization: Bearer {{token}}
         }
     ]
 }
+
+### Advance Order
+PATCH http://localhost:3333/orders/{{order_id}}/advance
+Authorization: Bearer {{token}}

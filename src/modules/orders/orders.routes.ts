@@ -14,3 +14,5 @@ ordersRoutes.post(
   validateBodyMiddleware(CreateOrderDto),
   OrdersController.createOrder
 );
+ordersRoutes.get("/", OrdersController.listOrders);
+ordersRoutes.patch("/:id/advance", OrdersController.advanceOrder);
