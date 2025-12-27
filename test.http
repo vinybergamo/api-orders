@@ -1,46 +1,52 @@
-@token = eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWIiOiI2OTRjNjUzOWRlMWUxZDAyMWRlMDVkOTYiLCJpYXQiOjE3NjY2ODU3MTksImV4cCI6MTc2NzI5MDUxOX0.Fy7q44rN5GEMSX4y4ohpdnfpVMnBcKk1rjZ0BOP07fQ
-@order_id = 694d7df8f8a814f4ac90da24
+@baseUrl = http://localhost:3333
 
 ### Register
-POST http://localhost:3333/auth/register
+POST {{baseUrl}}/auth/register
 Content-Type: application/json
 
 {
-    "name": "Viny Bergamo",
-    "email": "vinybergamo@gmail.com",
-    "password": "123456"
+  "name": "Viny Bergamo",
+  "email": "vinybergamo@gmail.com",
+  "password": "123456"
 }
 
 ### Login
-POST http://localhost:3333/auth/login
+# @name login
+POST {{baseUrl}}/auth/login
 Content-Type: application/json
 
 {
-    "email": "vinybergamo@gmail.com",
-    "password": "123456"
+  "email": "vinybergamo@gmail.com",
+  "password": "123456"
 }
+### Capture Token
+@token = {{login.response.body.token}}
 
 ### List Orders
-GET http://localhost:3333/orders?limit=1
+GET {{baseUrl}}/orders?limit=1
 Authorization: Bearer {{token}}
 
 ### Create Order
-POST http://localhost:3333/orders
-Content-Type: application/json
+# @name createOrder
+POST {{baseUrl}}/orders
 Authorization: Bearer {{token}}
+Content-Type: application/json
 
 {
-    "lab": "Lab 1",
-    "patient": "Patient 1",
-    "customer": "Customer 1",
-    "services": [
-        {
-            "name": "Service 1",
-            "value": 10
-        }
-    ]
+  "lab": "Lab 1",
+  "patient": "Patient 1",
+  "customer": "Customer 1",
+  "services": [
+    {
+      "name": "Service 1",
+      "value": 10
+    }
+  ]
 }
 
+### Capture Order ID
+@order_id = {{createOrder.response.body._id}}
+
 ### Advance Order
-PATCH http://localhost:3333/orders/{{order_id}}/advance
+PATCH {{baseUrl}}/orders/{{order_id}}/advance
 Authorization: Bearer {{token}}

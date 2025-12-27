@@ -9,8 +9,6 @@ export const app = express();
 app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
 
-app.use("/", swaggerUi.serve, swaggerUi.setup(swaggerSpec));
-
 app.use("/auth", authRoutes);
 app.use("/orders", ordersRoutes);
 
